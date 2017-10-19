@@ -61,7 +61,7 @@ public class StepInAcceleration extends StepMode {
     public static float average = 0;
     private Timer timer;
     // 倒计时3.5秒，3.5秒内不会显示计步，用于屏蔽细微波动
-    private long duration = 3500;
+    private long duration = 500;
     private TimeCount time;
 
     public StepInAcceleration(Context context, StepCallBack stepCallBack) {

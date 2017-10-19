@@ -31,11 +31,8 @@
         </activity>
 
         <service
-            android:name=".StepService"
-            android:priority="1000"
-            android:process=":process1">
+            android:name=".StepService">
             <intent-filter>
-                <!-- 系统启动完成后会调用-->
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.DATE_CHANGED" />
                 <action android:name="android.intent.action.MEDIA_MOUNTED" />

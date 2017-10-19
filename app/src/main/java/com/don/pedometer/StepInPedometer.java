@@ -46,16 +46,18 @@ public class StepInPedometer extends StepMode {
 
     private void addCountStepListener() {
         Sensor detectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
-        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+//        Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
         if (detectorSensor != null) {
             sensorManager.registerListener(this, detectorSensor, SensorManager.SENSOR_DELAY_UI);
             isAvailable = true;
             sensorMode = 0;
-        } else if (countSensor != null) {
-            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
-            isAvailable = true;
-            sensorMode = 1;
-        } else {
+        }
+//        else if (countSensor != null) {
+//            sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI);
+//            isAvailable = true;
+//            sensorMode = 1;
+//        }
+        else {
             isAvailable = false;
             Log.v(TAG, "Count sensor not available!");
         }

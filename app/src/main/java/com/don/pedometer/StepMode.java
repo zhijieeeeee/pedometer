@@ -36,15 +36,6 @@ public abstract class StepMode implements SensorEventListener {
         }
         sensorManager = (SensorManager) context
                 .getSystemService(Context.SENSOR_SERVICE);
-//        getLock(this);
-//        android4.4以后可以使用计步传感器
-//        int VERSION_CODES = android.os.Build.VERSION.SDK_INT;
-//        if (VERSION_CODES >= 19) {
-//            addCountStepListener();
-//        } else {
-//            addBasePedoListener();
-//        }
-
     }
 
 
