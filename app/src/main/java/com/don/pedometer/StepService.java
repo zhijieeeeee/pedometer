@@ -25,9 +25,7 @@ import java.util.TimerTask;
 
 public class StepService extends Service implements StepCallBack {
 
-    private static final long SCREEN_OFF_RECEIVER_DELAY = 500l;
-
-    //默认为30秒进行一次存储
+    //默认为30秒进行一次本地存储
     private static int duration = 30000;
 
     private BroadcastReceiver mBatInfoReceiver;
@@ -56,6 +54,9 @@ public class StepService extends Service implements StepCallBack {
         SQLiteDatabase db = Connector.getDatabase();
     }
 
+    /**
+     * 初始化广播
+     */
     private void initBroadcastReceiver() {
         final IntentFilter filter = new IntentFilter();
         // 屏幕灭屏广播
@@ -89,7 +90,7 @@ public class StepService extends Service implements StepCallBack {
                             startStep();
                         }
                     };
-                    new Handler().postDelayed(runnable, SCREEN_OFF_RECEIVER_DELAY);
+                    new Handler().postDelayed(runnable, 500l);
                 } else if (Intent.ACTION_USER_PRESENT.equals(action)) {
                     save();
                     //改为30秒一存储
@@ -102,7 +103,6 @@ public class StepService extends Service implements StepCallBack {
                 } else if (Intent.ACTION_DATE_CHANGED.equals(intent.getAction())) {
                     //时间改变监听
                     initTodayData();
-                    Step(StepMode.CURRENT_SETP);
                 }
             }
         };
@@ -166,6 +166,27 @@ public class StepService extends Service implements StepCallBack {
         }
     }
 
+    /**
+     * 保存当前步数到本地
+     */
+    private void save() {
+        int tempStep = StepMode.CURRENT_SETP;
+        List<StepData> list = DataSupport.where("time=?", getTodayDate()).find(StepData.class);
+        if (list == null || list.size() == 0) {//新增
+            StepData data = new StepData();
+            data.setTime(getTodayDate());
+            data.setStep(tempStep);
+            data.save();
+        } else if (list.size() == 1) {//修改
+            ContentValues values = new ContentValues();
+            values.put("step", tempStep);
+            DataSupport.update(StepData.class, values, list.get(0).getId());
+        }
+    }
+
+    /**
+     * 获取当前日期
+     */
     private String getTodayDate() {
         Date date = new Date(System.currentTimeMillis());
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
@@ -192,21 +213,6 @@ public class StepService extends Service implements StepCallBack {
 
         @Override
         public void onTick(long millisUntilFinished) {
-        }
-    }
-
-    private void save() {
-        int tempStep = StepMode.CURRENT_SETP;
-        List<StepData> list = DataSupport.where("time=?", getTodayDate()).find(StepData.class);
-        if (list == null || list.size() == 0) {//新增
-            StepData data = new StepData();
-            data.setTime(getTodayDate());
-            data.setStep(tempStep);
-            data.save();
-        } else if (list.size() == 1) {//修改
-            ContentValues values = new ContentValues();
-            values.put("step", tempStep);
-            DataSupport.update(StepData.class, values, list.get(0).getId());
         }
     }
 
